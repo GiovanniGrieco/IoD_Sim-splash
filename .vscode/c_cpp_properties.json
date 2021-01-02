@@ -3,7 +3,8 @@
         {
             "name": "Linux",
             "includePath": [
-                "/usr/lib/llvm-10/include/"
+                "/usr/lib/llvm-10/include/",
+                "${workspaceFolder}/vcpkg/installed/x64-linux/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",
