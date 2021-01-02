@@ -1,3 +1,6 @@
 *.pch
 *.json
-build
+build/
+irs/
+models/
+packages/
