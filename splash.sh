@@ -33,8 +33,20 @@ rm -rf {models,irs,packages}
 # directory skeleton
 mkdir {models,irs,packages} 2>/dev/null
 
-FILES=$(find -L ${IODSIM_DIR}/ns3/src/ -type d \( -name examples -o -name test \) -prune -false -o -name "*-model.cc")
-FILES_NUM=$(find -L ${IODSIM_DIR}/ns3/src/ -type d \( -name examples -o -name test \) -prune -false -o -name "*-model.cc" | wc -l)
+FILES=$(find -L ${IODSIM_DIR}/ns3/src/ \
+             -type d \( -name examples -o -name test \) \
+             -prune -false -o \
+             -name "*-model.cc" -o \
+             -name "*-manager.cc" -o \
+             -name "*-mac.cc" -o \
+             -name "*-application.cc")
+FILES_NUM=$(find -L ${IODSIM_DIR}/ns3/src/ \
+                 -type d \( -name examples -o -name test \) \
+                 -prune -false -o \
+                 -name "*-model.cc" \
+                 -o -name "*-manager.cc" -o \
+                 -name "*-mac.cc" \
+                 -o -name "*-application.cc" | wc -l)
 i=1
 for f in $FILES; do
     FNAME=${f##*/}
