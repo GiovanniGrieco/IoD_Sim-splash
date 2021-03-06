@@ -72,6 +72,9 @@ void Splash::exportExtractedInformation()
         object obj;
         array attributes;
 
+        if (!m.parent.empty())
+            obj["parent"] = m.parent;
+
         obj["name"] = m.name;
         for (auto& a : m.attributes) {
             attributes.push_back({
@@ -153,6 +156,24 @@ bool Splash::isMethod(const CXCursor &cursor, std::string methodName)
                       spellText.compare(methodName) == 0;
 
     clang_disposeString(spell);
+
+    return flag;
+}
+
+bool Splash::isTypeReference(const CXCursor &cursor)
+{
+    if (isDebugEnabled()) DEBUG();
+    CXCursorKind curKind = clang_getCursorKind(cursor);
+    const bool flag = curKind == CXCursorKind::CXCursor_TypeRef;
+
+    return flag;
+}
+
+bool Splash::hasParent(const CXCursor &parent, std::string targetParent)
+{
+    if (isDebugEnabled()) DEBUG();
+    CXString parentName = clang_getCursorSpelling(parent);
+    const bool flag = targetParent.compare(clang_getCString(parentName)) == 0;
 
     return flag;
 }
@@ -308,6 +329,7 @@ void Splash::showIncludedFile(const CXCursor &cursor)
 void Splash::inspectCursor(const CXCursor &cursor)
 {
     if (isDebugEnabled()) DEBUG();
+    std::cout << "--- Cursor ---" << std::endl;
     showSpell(cursor);
     showCursorKind(cursor);
     showType(cursor);
@@ -333,6 +355,18 @@ std::string Splash::getParentObjectName(const CXCursor &cursor)
     clang_disposeString(semanticParentName);
 
     return name;
+}
+
+std::string Splash::getTypeName(const CXCursor &cursor)
+{
+    if (isDebugEnabled()) DEBUG();
+    CXType type = clang_getCursorType(cursor);
+    CXString typeName = clang_getTypeSpelling(type);
+    const std::string typeNameStr {clang_getCString(typeName)};
+
+    clang_disposeString(typeName);
+
+    return typeNameStr;
 }
 
 std::string Splash::getSourceCode(const CXCursor &cursor)
@@ -394,6 +428,13 @@ CXChildVisitResult Splash::explorerCallback(CXCursor cursor, CXCursor parent, CX
         next = level + 1;
     } else if (level >= 2 && isDecl(cursor, "ns3::TypeId", "GetTypeId")) {
         //inspectCursor(cursor, parent)
+        // visit children recursively
+        next = level + 1;
+    } else if (level >= 3 && isTypeReference(cursor) && hasParent(parent, "SetParent")) {
+        //inspectCursor(cursor, parent);
+        const std::string parentName = getTypeName(cursor);
+        Splash::getInstance()->m_models.back().parent = parentName;
+
         // visit children recursively
         next = level + 1;
     } else if (level >= 3 && isCallExpr(cursor, "ns3::TypeId", "AddAttribute")) {

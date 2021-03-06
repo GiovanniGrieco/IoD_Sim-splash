@@ -20,10 +20,12 @@ public:
 class Model {
 public:
     Model(std::string n):
+        parent {""},
         name {n},
         attributes {}
     {}
 
+    std::string parent;
     std::string name;
     std::vector<Attribute> attributes;
 };
@@ -50,6 +52,8 @@ private:
     static bool isDebugEnabled();
     static bool isNamespace(const CXCursor &cursor, std::string namespaceName);
     static bool isMethod(const CXCursor &cursor, std::string methodName);
+    static bool isTypeReference(const CXCursor &cursor);
+    static bool hasParent(const CXCursor &parent, std::string targetParent);
     static bool isDecl(const CXCursor &cursor, std::string typeDecl, std::string parentName);
     static bool isCallExpr(const CXCursor &cursor, std::string exprReturnType, std::string name);
     static bool isFromMainFile(const CXCursor &cursor);
@@ -63,6 +67,7 @@ private:
     static void showIncludedFile(const CXCursor &cursor);
     static void showParent(const CXCursor &cursor, const CXCursor &parent);
     static std::string getParentObjectName(const CXCursor &cursor);
+    static std::string getTypeName(const CXCursor &cursor);
     static std::string getSourceCode(const CXCursor &cursor);
     static std::string getSourceCodeText(std::string filePath, unsigned int startOffset, unsigned int endOffset);
 
