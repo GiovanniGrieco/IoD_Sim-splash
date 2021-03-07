@@ -68,6 +68,11 @@ void Splash::exportExtractedInformation()
     using namespace boost::json;
     array arr;
 
+    if (m_models.empty()) {
+        std::cout << "Warning: no TypeId found in " << m_astFilePath << std::endl;
+        return;
+    }
+
     for (auto& m : m_models) {
         object obj;
         array attributes;
