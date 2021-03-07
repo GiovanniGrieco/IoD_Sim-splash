@@ -33,23 +33,29 @@ rm -rf {models,irs,packages}
 # directory skeleton
 mkdir {models,irs,packages} 2>/dev/null
 
+# FILES=$(cat ${IODSIM_DIR}/ns3/build/compile_commands.json | jq -c '.[] | .file' | sed -e 's/^\"\.\.\///g' -e 's/\"$//g' | grep '^src/')
+# FILES_NUM=$(cat ${IODSIM_DIR}/ns3/build/compile_commands.json | jq -c '.[] | .file' | sed -e 's/^\"\.\.\///g' -e 's/\"$//g' | grep '^src/' | wc -l)
+# INCLUDE_FLAGS=$(cat ${IODSIM_DIR}/ns3/build/compile_commands.json | jq -c '.[] | .command' | grep -o '\-I[a-zA-Z0-9\/\.]* ' | sort | uniq | sed -e '/^-I\// ! s/-I/-I\$\{IODSIM_DIR\}\/ns3\/build\//g')
+
 FILES=$(find -L ${IODSIM_DIR}/ns3/src/ \
              -type d \( -name examples -o -name test \) \
              -prune -false -o \
              -name "*-model.cc" -o \
              -name "*-manager.cc" -o \
              -name "*-mac.cc" -o \
-             -name "*-application.cc")
+             -name "*application.cc")
 FILES_NUM=$(find -L ${IODSIM_DIR}/ns3/src/ \
                  -type d \( -name examples -o -name test \) \
                  -prune -false -o \
                  -name "*-model.cc" \
                  -o -name "*-manager.cc" -o \
                  -name "*-mac.cc" \
-                 -o -name "*-application.cc" | wc -l)
+                 -o -name "*application.cc" | wc -l)
 i=1
 for f in $FILES; do
-    FNAME=${f##*/}
+    #FPATH="${IODSIM_DIR}/ns3/${f}"
+    FPATH=$f
+    FNAME=${FPATH##*/}
     FNAME_WITHOUT_EXT=${FNAME%.*}
     PCH_MODEL_PATH="models/${FNAME_WITHOUT_EXT}.pch"
     IR_MODEL_PATH="irs/${FNAME_WITHOUT_EXT}.json"
@@ -59,7 +65,7 @@ for f in $FILES; do
       -I${IODSIM_DIR}/ns3/build/ \
       -emit-ast \
       -o $PCH_MODEL_PATH \
-      $f
+      $FPATH
 
     ./build/splash $PCH_MODEL_PATH $IR_MODEL_PATH
     i=$(($i + 1))
@@ -69,4 +75,6 @@ pushd irs &>/dev/null
 jq -s '.[0]=([.[]]|flatten)|.[0]' *.json > merged.json
 popd &>/dev/null
 
-./generate_nodes.py irs/merged.json packages/ -p iodsim
+./parent_solver.py irs/merged.json irs/merged-parent_solved.json
+
+./generate_nodes.py irs/merged-parent_solved.json packages/ -p iodsim
