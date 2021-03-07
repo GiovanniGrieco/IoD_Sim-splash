@@ -4,3 +4,4 @@ build/
 irs/
 models/
 packages/
+venv/
