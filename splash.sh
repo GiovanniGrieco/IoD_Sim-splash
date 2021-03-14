@@ -10,8 +10,8 @@ fi
 IODSIM_DIR=$1
 
 # check dependencies are OK
-ls ./build/splash &>/dev/null
-if [ "$?" -ne 0 ]; then
+SPLASH=$(find . -name splash -executable -type f)
+if [ -z "$SPLASH" ]; then
     echo "Cannot find splash executable. Did you compile it?"
     exit 1
 fi
@@ -67,7 +67,7 @@ for f in $FILES; do
       -o $PCH_MODEL_PATH \
       $FPATH
 
-    ./build/splash $PCH_MODEL_PATH $IR_MODEL_PATH
+    $SPLASH $PCH_MODEL_PATH $IR_MODEL_PATH
     i=$(($i + 1))
 done
 
