@@ -35,11 +35,13 @@ class NodeGenerator:
                 type = self._sim_type_lookup(attr['type'])
                 input_metacode = f'self.input({i})' if type is None else f'{type}(self.input({i}))'
 
-                node_outputs.append(f'\'{attr["name"]}\': {input_metacode}')
+                node_outputs.append(f'if self.input({i}): d["attributes"].append({{"name": "{attr["name"]}", "value": {input_metacode}}})')
                 i += 1
 
+            newline_char = '\n        '
             node_metacode = template_code
-            node_metacode = node_metacode.replace('%OUTPUT_CONSTRUCT%', f'{{{",".join(node_outputs)}}}')
+            node_metacode = node_metacode.replace('%NODE_NAME%', f'"ns3::{node["name"]}"')
+            node_metacode = node_metacode.replace('%POPULATE_DICTIONARY%', f'{newline_char.join(node_outputs)}')
 
             with open(f'{node_dir}/{self.package_name}___{node["name"]}0___METACODE.py', 'w') as f:
                 f.write(node_metacode)

@@ -5,7 +5,14 @@ class %CLASS%(NodeInstance):
         super(%CLASS%, self).__init__(params)
 
     def update_event(self, input_called=-1):
-        self.set_output_val(0, %OUTPUT_CONSTRUCT%)
+        d = {
+            'name': %NODE_NAME%,
+            'attributes': []
+        }
+
+        %POPULATE_DICTIONARY%
+
+        self.set_output_val(0, d)
 
     def get_data(self):
         data = {}
