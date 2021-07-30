@@ -400,7 +400,7 @@ std::string Splash::getSourceCodeText(std::string filePath, unsigned int startOf
 {
     if (isDebugEnabled()) DEBUG();
     std::ifstream ifs(filePath);
-    size_t bufferSize = endOffset - startOffset + 1;
+    unsigned int bufferSize = endOffset - startOffset + 1;
     std::string contents(bufferSize, '\0');
 
     ifs.seekg(startOffset);
