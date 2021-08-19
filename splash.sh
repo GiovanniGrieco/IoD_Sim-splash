@@ -1,6 +1,6 @@
-#!/usr/bin/bash
+#!/bin/bash
 
-set -e
+#set -e
 #set -x
 
 if [ -z "$1" ]; then
