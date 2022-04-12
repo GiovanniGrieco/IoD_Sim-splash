@@ -39,18 +39,20 @@ mkdir {models,irs,packages} 2>/dev/null
 
 FILES=$(find -L ${IODSIM_DIR}/ns3/src/ \
              -type d \( -name examples -o -name test \) \
-             -prune -false -o \
-             -name "*-model.cc" -o \
-             -name "*-manager.cc" -o \
-             -name "*-mac.cc" -o \
-             -name "*application.cc")
+             -prune -false \
+             -o -name "*-model.cc" \
+             -o -name "*-manager.cc" \
+             -o -name "*-mac.cc" \
+             -o -name "*application.cc" \
+             -o -name "*energy-source.cc")
 FILES_NUM=$(find -L ${IODSIM_DIR}/ns3/src/ \
                  -type d \( -name examples -o -name test \) \
-                 -prune -false -o \
-                 -name "*-model.cc" \
-                 -o -name "*-manager.cc" -o \
-                 -name "*-mac.cc" \
-                 -o -name "*application.cc" | wc -l)
+                 -prune -false \
+                 -o -name "*-model.cc" \
+                 -o -name "*-manager.cc" \
+                 -o -name "*-mac.cc" \
+                 -o -name "*application.cc" \
+                 -o -name "*energy-source.cc" | wc -l)
 i=1
 for f in $FILES; do
     #FPATH="${IODSIM_DIR}/ns3/${f}"
