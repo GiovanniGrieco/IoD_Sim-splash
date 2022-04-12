@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.0.0)
+if (WIN32)
 set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake
   CACHE STRING "Vcpkg toolchain file")
+endif (WIN32)
+
 project(splash VERSION 0.1.0)
 
 include(CTest)
