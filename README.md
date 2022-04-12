@@ -20,7 +20,7 @@ $ cmake -B build -S .
 ## Quick Start with vcpkg
 If you use vcpkg, you can install those requirements via vcpkg. Here's some sample commands:
 ```powershell
-# switch workring directory to vcpkg
+# switch current working directory to vcpkg
 > ./vcpkg install cxxopts
 > ./vcpkg install boost-json
 > ./vcpkg install llvm[clang]
