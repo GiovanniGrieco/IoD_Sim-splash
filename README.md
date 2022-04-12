@@ -1,8 +1,9 @@
 # Splash
 
-Splash is a transpiler from C++ to Python to extend Visual Programming Language environment with basic
-tools to configure and create simulation scenarios on IoD Sim. It was created during Formal Languages and Compilers
-course by Sara Galasso and Giovanni Grieco.
+Splash is a transpiler from C++ to Python to extend Airflow Visual Programming Language environment with basic
+tools to configure and create simulation scenarios on [IoD Sim](https://github.com/telematics-lab/IoD_Sim).
+
+Splash inner workings are described along the entire simulation platform on [arXiv](https://arxiv.org/abs/2203.13710).
 
 ## Requirements
 Splash requires the following software to be used:
