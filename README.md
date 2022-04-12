@@ -10,6 +10,12 @@ Splash requires the following software to be used:
 * boost-json
 * libclang (from the llvm project)
 
+## Quick Start on Linux-based OS without vcpkg
+```bash
+$ ./install-dependencies.sh
+$ cmake -B build -S .
+```
+
 ## Quick Start with vcpkg
 If you use vcpkg, you can install those requirements via vcpkg. Here's some sample commands:
 ```powershell
